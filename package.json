@@ -15,7 +15,11 @@
     "commands": [
       {
         "command": "sensors-sdker.ping",
-        "title": "ping"
+        "title": "Ping"
+      },
+      {
+        "command": "sensors-sdker.post",
+        "title": "Post"
       }
     ]
   },
