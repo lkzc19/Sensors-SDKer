@@ -1,10 +1,6 @@
 
 import * as vscode from 'vscode';
-import * as fs from "fs";
 import { PostPanel } from './panel/PostPanel';
-import { HelloWorldPanel } from './panel/TestPanel';
-
-
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -16,8 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	const postDisposable = vscode.commands.registerCommand('sensors-sdker.post', () => {
-		// PostPanel.createOrShow(context);
-		HelloWorldPanel.render(context.extensionUri);
+		PostPanel.render(context);
 	});
 
 	context.subscriptions.push(pingDisposable, postDisposable);
