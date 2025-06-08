@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "sensors-sdker.helloWorld",
-        "title": "Hello World"
+        "command": "sensors-sdker.ping",
+        "title": "ping"
       }
     ]
   },
