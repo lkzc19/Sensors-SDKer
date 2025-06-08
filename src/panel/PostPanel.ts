@@ -21,6 +21,7 @@ export class PostPanel {
   }
 
   private static getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
+    const stylesUri = getUri(webview, extensionUri, ["webview", "dist", "assets", "index.css"]);
     const scriptUri = getUri(webview, extensionUri, ["webview", "dist", "assets", "index.js"]);
   
     return `
@@ -31,6 +32,7 @@ export class PostPanel {
           <link rel="icon" href="/favicon.ico">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Vite App</title>
+          <link rel="stylesheet" crossorigin href="${stylesUri}">
           <script type="module" crossorigin src="${scriptUri}"></script>
         </head>
         <body>
