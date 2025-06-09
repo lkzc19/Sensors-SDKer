@@ -3,4 +3,24 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+import {
+  // create naive ui
+  create,
+  // component
+  NButton,
+  NInput,
+  NSelect,
+  NCard,
+  NTabs,
+  NTabPane,
+  NForm,
+  NFormItem,
+} from 'naive-ui'
+
+const naive = create({
+  components: [NButton, NInput, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem],
+})
+
+const app = createApp(App)
+app.use(naive)
+app.mount('#app')
