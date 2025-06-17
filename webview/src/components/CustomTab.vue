@@ -5,30 +5,38 @@ import { NInput, NButton } from 'naive-ui'
 
 interface PropData {
   index: number
-  key: string
-  value: string
-  type: string
+  pKey: string
+  pValue: string
+  pType: string
 }
 
-const customProp = ref<PropData[]>([])
+const customProp = ref<PropData[]>([{ index: 0, pKey: '', pValue: '', pType: '' }]);
 
 // 生成唯一key
 const generateKey = () => {
   return customProp.value.length === 0 ? 0 : Math.max(...customProp.value.map(row => row.index)) + 1
 }
 
+// 检查最后一行是否从无数据变为有数据，并添加新行
+const checkAndAddRow = () => {
+  const lastRow = customProp.value[customProp.value.length - 1];
+  if (lastRow && (lastRow.pKey || lastRow.pValue)) {
+    addRow();
+  }
+}
+
 // 新增行
 const addRow = () => {
   customProp.value.push({
     index: generateKey(),
-    key: '',
-    value: '',
-    type: ''
+    pKey: '',
+    pValue: '',
+    pType: ''
   })
 }
 
 // 删除行
-const deleteRow = (index: number) => {
+const delRow = (index: number) => {
   customProp.value.splice(index, 1)
 }
 
@@ -38,27 +46,38 @@ const columns = computed<DataTableColumns<PropData>>(() => [
     title: '属性名',
     key: 'key',
     render: (row, index) => h(NInput, {
-      value: row.key,
-      onUpdateValue: (v) => { customProp.value[index].key = v }
+      value: row.pKey,
+      onUpdateValue: (v) => { 
+        customProp.value[index].pKey = v;
+        checkAndAddRow();
+      }
     })
   },
   {
     title: '属性值',
-    key: 'age',
+    key: 'value',
     render: (row, index) => h(NInput, {
-      value: row.value,
-      onUpdateValue: (v) => { customProp.value[index].value = v }
+      value: row.pValue,
+      onUpdateValue: (v) => { 
+        customProp.value[index].pValue = v;
+        checkAndAddRow();
+      }
     })
   },
   {
     title: '操作',
     key: 'actions',
-    render: (row, index) => h(NButton, {
-      type: 'error',
-      size: 'small',
-      onClick: () => deleteRow(index)
-    }, '删除')
-  }
+    render: (row, index) => {
+      if (index === customProp.value.length - 1) {
+        return null;
+      }
+      return h(NButton, {
+        type: 'error',
+        size: 'small',
+        onClick: () => delRow(index)
+      }, '删除')
+    }
+  },
 ])
 </script>
 
