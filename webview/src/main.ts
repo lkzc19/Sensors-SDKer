@@ -15,10 +15,11 @@ import {
   NTabPane,
   NForm,
   NFormItem,
+  NDataTable,
 } from 'naive-ui'
 
 const naive = create({
-  components: [NButton, NInput, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem],
+  components: [NButton, NInput, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable],
 })
 
 const app = createApp(App)

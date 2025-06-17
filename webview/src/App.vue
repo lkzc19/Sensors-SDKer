@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import { ref, h, computed} from 'vue'
+
+import SA from 'sa-sdk-javascript'
+
+import type { DataTableColumns } from 'naive-ui'
+import { NInput, NButton } from 'naive-ui'
+
+import BaseAttributes from './components/BaseTab.vue'
+import CustomAttributes from './components/CustomTab.vue'
 // import SA from 'sa-sdk-javascript'
 
 // SA.init({
@@ -16,9 +25,7 @@
 //   })
 // }
 
-import { ref } from 'vue'
-import SA from 'sa-sdk-javascript'
-import { NSpace } from 'naive-ui'
+
 
 const requestUrl = ref('')
 const activeTab = ref('Params')
@@ -41,6 +48,8 @@ const saTypeOptions = [
   { label: 'profile', value: 'profile' },
 ]
 const saType = ref('track')
+
+
 </script>
 
 <template>
@@ -57,9 +66,14 @@ const saType = ref('track')
     <div class="sa-main">
       <n-card style="margin-bottom: 16px">
         <n-tabs type="line">
-          <n-tab-pane name="custom" tab="自定义属性"> Wonderwall </n-tab-pane>
-          <n-tab-pane name="IDM" tab="ID关联"> Hey Jude </n-tab-pane>
-          <n-tab-pane name="common" tab="公共属性"> 七里香 </n-tab-pane>
+          <n-tab-pane name="base" tab="基础属性"> 
+            <BaseAttributes />
+          </n-tab-pane>
+          <n-tab-pane name="custom" tab="自定义属性">
+            <CustomAttributes />
+          </n-tab-pane>
+          <n-tab-pane name="idm" tab="ID关联"> Hey Jude </n-tab-pane>
+          <n-tab-pane name="common" tab="预置属性"> 七里香 </n-tab-pane>
         </n-tabs>
       </n-card>
     </div>
