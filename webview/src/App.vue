@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref, h, computed} from 'vue'
+import { ref } from 'vue'
 
 import SA from 'sa-sdk-javascript'
 
-import type { DataTableColumns } from 'naive-ui'
 import { NInput, NButton } from 'naive-ui'
 
-import BaseAttributes from './components/BaseTab.vue'
-import CustomAttributes from './components/CustomTab.vue'
-// import SA from 'sa-sdk-javascript'
+import type { PropData } from '@/types/sensor-types'
+
+import BaseTab from './components/BaseTab.vue'
+import CustomTab from './components/CustomTab.vue'
+import IdmTab from './components/IdmTab.vue'
+import PresetTab from './components/PresetTab.vue'
 
 // SA.init({
 //   server_url: 'https://webhook.site/0928ce21-9bc6-4647-8c95-89caf70c4f28', // 注册地址
@@ -24,8 +26,6 @@ import CustomAttributes from './components/CustomTab.vue'
 //     type: 'button',
 //   })
 // }
-
-
 
 const requestUrl = ref('')
 const activeTab = ref('Params')
@@ -48,8 +48,11 @@ const saTypeOptions = [
   { label: 'profile', value: 'profile' },
 ]
 const saType = ref('track')
+const customData = ref()
 
-
+const handleCustomUpdate = (newData: PropData[]) => {
+  customData.value = newData
+}
 </script>
 
 <template>
@@ -66,14 +69,18 @@ const saType = ref('track')
     <div class="sa-main">
       <n-card style="margin-bottom: 16px">
         <n-tabs type="line">
-          <n-tab-pane name="base" tab="基础属性"> 
-            <BaseAttributes />
+          <n-tab-pane name="base" tab="基础属性">
+            <BaseTab />
           </n-tab-pane>
           <n-tab-pane name="custom" tab="自定义属性">
-            <CustomAttributes />
+            <CustomTab @update="handleCustomUpdate" />
           </n-tab-pane>
-          <n-tab-pane name="idm" tab="ID关联"> Hey Jude </n-tab-pane>
-          <n-tab-pane name="common" tab="预置属性"> 七里香 </n-tab-pane>
+          <n-tab-pane name="idm" tab="ID关联">
+            <IdmTab />
+          </n-tab-pane>
+          <n-tab-pane name="common" tab="预置属性">
+            <PresetTab />
+          </n-tab-pane>
         </n-tabs>
       </n-card>
     </div>
