@@ -9,6 +9,7 @@ import {
   // component
   NButton,
   NInput,
+  NInputGroup,
   NSelect,
   NCard,
   NTabs,
@@ -16,10 +17,18 @@ import {
   NForm,
   NFormItem,
   NDataTable,
+  NSwitch,
+  NRadio,
+
+  NDatePicker,
+  NTimePicker,
 } from 'naive-ui'
 
 const naive = create({
-  components: [NButton, NInput, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable],
+  components: [
+    NButton, NInput, NInputGroup, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable, NSwitch, NRadio,
+    NDatePicker, NTimePicker
+  ],
 })
 
 const app = createApp(App)

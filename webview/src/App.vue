@@ -63,7 +63,7 @@ const handleCustomUpdate = (newData: PropData[]) => {
       </n-space>
 
       <n-input type="text" size="large" placeholder="大" />
-      <n-button type="info" @click="">上报</n-button>
+      <n-button type="success" @click="">上报</n-button>
     </div>
 
     <div class="sa-main">
@@ -72,13 +72,13 @@ const handleCustomUpdate = (newData: PropData[]) => {
           <n-tab-pane name="base" tab="基础属性">
             <BaseTab />
           </n-tab-pane>
-          <n-tab-pane name="custom" tab="自定义属性">
-            <CustomTab @update="handleCustomUpdate" />
-          </n-tab-pane>
           <n-tab-pane name="idm" tab="ID关联">
             <IdmTab />
           </n-tab-pane>
-          <n-tab-pane name="common" tab="预置属性">
+          <n-tab-pane name="custom" tab="自定义属性">
+            <CustomTab @update="handleCustomUpdate" />
+          </n-tab-pane>
+          <n-tab-pane name="preset" tab="预置属性">
             <PresetTab />
           </n-tab-pane>
         </n-tabs>
