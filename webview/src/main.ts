@@ -7,6 +7,8 @@ import {
   // create naive ui
   create,
   // component
+  NConfigProvider,
+  NSpace,
   NButton,
   NInput,
   NInputGroup,
@@ -27,6 +29,8 @@ import {
 
 const naive = create({
   components: [
+    NConfigProvider,
+    NSpace,
     NButton, NInput, NInputGroup, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable, NSwitch,
     NRadio, NRadioGroup,
     NDatePicker, NTimePicker

@@ -3,26 +3,26 @@ import { ref, computed, h, watch } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
 import { NInput, NButton } from 'naive-ui'
 
-import type { PropData } from '@/types/sensor-types'
+import type { OtherTabData } from '@/types/TabData'
 
-const customProp = ref<PropData[]>([{ index: 0, pKey: '', pValue: '', pType: '' }])
+const data = ref<OtherTabData[]>([{ index: 0, pKey: '', pValue: '', pType: '' }])
 
 const emit = defineEmits(['update'])
 
-watch(customProp, (newVal: PropData[]) => {
+watch(data, (newVal: OtherTabData[]) => {
   emit('update', newVal)
 }, { deep: true })
 
 // 生成唯一key
 const generateKey = () => {
-  return customProp.value.length === 0
+  return data.value.length === 0
     ? 0
-    : Math.max(...customProp.value.map((row) => row.index)) + 1
+    : Math.max(...data.value.map((row) => row.index)) + 1
 }
 
 // 检查最后一行是否从无数据变为有数据，并添加新行
 const checkAndAddRow = () => {
-  const lastRow = customProp.value[customProp.value.length - 1]
+  const lastRow = data.value[data.value.length - 1]
   if (lastRow && (lastRow.pKey || lastRow.pValue)) {
     addRow()
   }
@@ -30,7 +30,7 @@ const checkAndAddRow = () => {
 
 // 新增行
 const addRow = () => {
-  customProp.value.push({
+  data.value.push({
     index: generateKey(),
     pKey: '',
     pValue: '',
@@ -40,11 +40,11 @@ const addRow = () => {
 
 // 删除行
 const delRow = (index: number) => {
-  customProp.value.splice(index, 1)
+  data.value.splice(index, 1)
 }
 
 // 动态列配置
-const columns = computed<DataTableColumns<PropData>>(() => [
+const columns = computed<DataTableColumns<OtherTabData>>(() => [
   {
     type: 'selection',
   },
@@ -55,7 +55,7 @@ const columns = computed<DataTableColumns<PropData>>(() => [
       h(NInput, {
         value: row.pKey,
         onUpdateValue: (v) => {
-          customProp.value[index].pKey = v
+          data.value[index].pKey = v
           checkAndAddRow()
         },
       }),
@@ -67,7 +67,7 @@ const columns = computed<DataTableColumns<PropData>>(() => [
       h(NInput, {
         value: row.pValue,
         onUpdateValue: (v) => {
-          customProp.value[index].pValue = v
+          data.value[index].pValue = v
           checkAndAddRow()
         },
       }),
@@ -76,7 +76,7 @@ const columns = computed<DataTableColumns<PropData>>(() => [
     title: '操作',
     key: 'actions',
     render: (row, index) => {
-      if (index === customProp.value.length - 1) {
+      if (index === data.value.length - 1) {
         return null
       }
       return h(
@@ -86,7 +86,7 @@ const columns = computed<DataTableColumns<PropData>>(() => [
           size: 'small',
           onClick: () => delRow(index),
         },
-        '删除',
+        () => '删除',
       )
     },
   },
@@ -94,5 +94,5 @@ const columns = computed<DataTableColumns<PropData>>(() => [
 </script>
 
 <template>
-  <n-data-table :columns="columns" :data="customProp" :single-line="false" />
+  <n-data-table :columns="columns" :data="data" :row-key="(data: OtherTabData) => data.index" :single-line="false"/>
 </template>

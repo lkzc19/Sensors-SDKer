@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineEmits, watch } from 'vue'
+
+import type { BaseTabData } from '@/types/TabData'
+
 import { NForm, NFormItem, NInput } from 'naive-ui'
 
-const data = ref({
-  event: '',
-  time: '',
-  idm: 'idm2',
-  distinct_id: '',
-  login_id: '',
-})
+
+const data = ref<BaseTabData>({event: 'zdrugs',  time: '',  idm: 'idm2',  distinct_id: '',  login_id: ''})
+
+
+
+const emit = defineEmits(['updateData'])
+// 数据初始化后触发事件
+emit('updateData', data.value)
+watch(data, (newVal: BaseTabData) => {
+  emit('updateData', newVal)
+}, { deep: true })
 
 const rules = {
   event: { required: true },
