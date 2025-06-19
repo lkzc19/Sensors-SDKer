@@ -49,10 +49,10 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
       maxWidth: '640px',
     }"
   >
-    <n-form-item label="事件名" required>
+    <n-form-item label="事件名">
       <n-input v-model:value="data.event" placeholder="输入事件名" />
     </n-form-item>
-    <n-form-item label="时间戳" required>
+    <n-form-item label="时间戳">
       <n-input-group>
         <n-select :style="{ width: '20%' }" :options="timeTypeOptions" v-model:value="timeType" />
         <n-input
@@ -76,7 +76,7 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
         />
       </n-input-group>
     </n-form-item>
-    <n-form-item label="IDM 版本" required>
+    <n-form-item label="IDM 版本">
       <n-radio-group v-model:value="data.idm">
         <n-space>
           <n-radio v-for="it in idmv" :key="it.value" :value="it.value">
@@ -85,10 +85,10 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
         </n-space>
       </n-radio-group>
     </n-form-item>
-    <n-form-item label="distinct_id" required>
+    <n-form-item label="distinct_id">
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
     </n-form-item>
-    <n-form-item label="login_id">
+    <n-form-item label="login_id" :show-require-mark="false">
       <n-input v-model:value="data.login_id" placeholder="login_id" />
     </n-form-item>
   </n-form>
