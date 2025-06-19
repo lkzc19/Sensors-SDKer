@@ -9,9 +9,13 @@ const customProp = ref<PropData[]>([{ index: 0, pKey: '', pValue: '', pType: '' 
 
 const emit = defineEmits(['update'])
 
-watch(customProp, (newVal: PropData[]) => {
-  emit('update', newVal)
-}, { deep: true })
+watch(
+  customProp,
+  (newVal: PropData[]) => {
+    emit('update', newVal)
+  },
+  { deep: true },
+)
 
 const idm_version = ref('idm2')
 
@@ -96,24 +100,5 @@ const columns = computed<DataTableColumns<PropData>>(() => [
 </script>
 
 <template>
-  <n-space>
-    <span>IMD 版本 </span>
-    <n-radio
-      :checked="idm_version === 'idm2'"
-      value="idm2"
-      name="idm-version"
-      @change="idm_version = 'idm2'"
-    >
-      idm2
-    </n-radio>
-    <n-radio
-      :checked="idm_version === 'idm3'"
-      value="idm3"
-      name="idm-version"
-      @change="idm_version = 'idm3'"
-    >
-      idm3
-    </n-radio>
-  </n-space>
   <n-data-table :columns="columns" :data="customProp" :single-line="false" />
 </template>

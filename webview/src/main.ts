@@ -19,6 +19,7 @@ import {
   NDataTable,
   NSwitch,
   NRadio,
+  NRadioGroup,
 
   NDatePicker,
   NTimePicker,
@@ -26,7 +27,8 @@ import {
 
 const naive = create({
   components: [
-    NButton, NInput, NInputGroup, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable, NSwitch, NRadio,
+    NButton, NInput, NInputGroup, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable, NSwitch,
+    NRadio, NRadioGroup,
     NDatePicker, NTimePicker
   ],
 })

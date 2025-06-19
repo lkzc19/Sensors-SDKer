@@ -5,34 +5,36 @@ import { NForm, NFormItem, NInput } from 'naive-ui'
 const data = ref({
   event: '',
   time: '',
+  idm: 'idm2',
   distinct_id: '',
+  login_id: '',
 })
 
 const rules = {
   event: { required: true },
   time: { required: true },
-  distinct_id: { required: true },
 }
 
 function formatDate(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
 }
 
-const ts = ref(new Date().getTime().toString());
-const dt = ref(formatDate(new Date()));
-const timeType = ref('timestamp')
+const ts = ref(new Date().getTime().toString())
+const dt = ref(formatDate(new Date()))
+const timeType = ref('default')
 const timeTypeOptions = [
   { label: '默认时间', value: 'default' },
   { label: '时间戳', value: 'timestamp' },
   { label: '日期时间', value: 'datetime' },
 ]
 
+const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
 </script>
 
 <template>
@@ -47,10 +49,10 @@ const timeTypeOptions = [
       maxWidth: '640px',
     }"
   >
-    <n-form-item label="事件名">
+    <n-form-item label="事件名" required>
       <n-input v-model:value="data.event" placeholder="输入事件名" />
     </n-form-item>
-    <n-form-item label="时间戳">
+    <n-form-item label="时间戳" required>
       <n-input-group>
         <n-select :style="{ width: '20%' }" :options="timeTypeOptions" v-model:value="timeType" />
         <n-input
@@ -61,11 +63,11 @@ const timeTypeOptions = [
         />
         <n-input
           v-if="timeType === 'timestamp'"
-          v-model:value="ts" 
+          v-model:value="ts"
           placeholder="输入时间戳"
           :style="{ width: '80%' }"
         />
-        <n-date-picker 
+        <n-date-picker
           v-if="timeType === 'datetime'"
           v-model:formatted-value="dt"
           value-format="yyyy.MM.dd HH:mm:ss"
@@ -74,8 +76,20 @@ const timeTypeOptions = [
         />
       </n-input-group>
     </n-form-item>
-    <n-form-item label="distinct_id">
+    <n-form-item label="IDM 版本" required>
+      <n-radio-group v-model:value="data.idm">
+        <n-space>
+          <n-radio v-for="it in idmv" :key="it.value" :value="it.value">
+            {{ it.value }}
+          </n-radio>
+        </n-space>
+      </n-radio-group>
+    </n-form-item>
+    <n-form-item label="distinct_id" required>
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
+    </n-form-item>
+    <n-form-item label="login_id">
+      <n-input v-model:value="data.login_id" placeholder="login_id" />
     </n-form-item>
   </n-form>
 </template>
