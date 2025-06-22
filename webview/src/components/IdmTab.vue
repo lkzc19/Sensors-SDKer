@@ -7,17 +7,18 @@ import type { OtherTabData } from '@/types/TabData'
 
 const data = ref<OtherTabData[]>([{ index: 0, pKey: '', pValue: '', pType: '' }])
 
-const emit = defineEmits(['update'])
-
-watch(data, (newVal: OtherTabData[]) => {
-  emit('update', newVal)
-}, { deep: true })
+const emit = defineEmits(['updateData'])
+watch(
+  data,
+  (newVal: OtherTabData[]) => {
+    emit('updateData', newVal)
+  },
+  { deep: true },
+)
 
 // 生成唯一key
 const generateKey = () => {
-  return data.value.length === 0
-    ? 0
-    : Math.max(...data.value.map((row) => row.index)) + 1
+  return data.value.length === 0 ? 0 : Math.max(...data.value.map((row) => row.index)) + 1
 }
 
 // 检查最后一行是否从无数据变为有数据，并添加新行
@@ -94,5 +95,10 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
 </script>
 
 <template>
-  <n-data-table :columns="columns" :data="data" :row-key="(data: OtherTabData) => data.index" :single-line="false"/>
+  <n-data-table
+    :columns="columns"
+    :data="data"
+    :row-key="(data: OtherTabData) => data.index"
+    :single-line="false"
+  />
 </template>

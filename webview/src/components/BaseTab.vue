@@ -1,21 +1,97 @@
 <script setup lang="ts">
 import { ref, defineEmits, watch } from 'vue'
 
-import type { BaseTabData } from '@/types/TabData'
-
 import { NForm, NFormItem, NInput } from 'naive-ui'
 
+import type { BaseTabData } from '@/types/TabData'
 
-const data = ref<BaseTabData>({event: 'zdrugs',  time: '',  idm: 'idm2',  distinct_id: '',  login_id: ''})
+const props = defineProps<{
+  saType: string
+}>()
 
+const event_array = [
+  'LightAttack',
+  'HeavyAttack',
+  'Parry',
+  'Riposte',
+  'Block',
+  'ShieldBash',
+  'Roll',
+  'Backstep',
+  'Jump',
+  'PlungingAttack',
+  'ComboAttacks',
+  'ChargeAttack',
+  'UseItem',
+  'TwoHandWield',
+  'SpellCasting',
+]
 
+const distinct_id_array = [
+  'the-unspeakable-deep',
+  'the-banquet',
+  'the-village',
+  'the-forest',
+  'the-keep',
+  'the-imposter',
+  'the-castle',
+  'the-red-hall',
+  'the-cave',
+  'the-mire',
+  'the-dome',
+  'the-sacrifice',
+  'the-ziggurat',
+  'the-construct',
+  'the-ruins',
+  'the-pitchwoods',
+  'the-lake',
+  'the-alkymancery',
+  'the-crypt',
+  'the-palace',
+  'ronin-cran',
+  'the-dried-king',
+  'the-witch-of-the-lake',
+  'the-nameless-god',
+]
+
+const data = ref<BaseTabData>({
+  event: event_array[Math.floor(Math.random() * event_array.length)],
+  time: '',
+  idmv: 'idm2',
+  distinct_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
+  login_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
+})
+
+let event_tmp = data.value.event
+
+watch(
+  () => props.saType,
+  (newVal) => {
+    if ('track' !== newVal) {
+      event_tmp = data.value.event
+    }
+    if ('track' === newVal) {
+      data.value.event = event_tmp
+    } else if ('track_signup' === newVal) {
+      data.value.event = '$SignUp'
+    } else if ('track_id_bind' === newVal) {
+      data.value.event = '$BindID'
+    } else if ('track_id_unbind' === newVal) {
+      data.value.event = '$UnbindID'
+    }
+  },
+)
 
 const emit = defineEmits(['updateData'])
 // 数据初始化后触发事件
 emit('updateData', data.value)
-watch(data, (newVal: BaseTabData) => {
-  emit('updateData', newVal)
-}, { deep: true })
+watch(
+  data,
+  (newVal: BaseTabData) => {
+    emit('updateData', newVal)
+  },
+  { deep: true },
+)
 
 const rules = {
   event: { required: true },
@@ -32,7 +108,7 @@ function formatDate(date: Date) {
   return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
 }
 
-const ts = ref(new Date().getTime().toString())
+const ts = ref(new Date().getTime())
 const dt = ref(formatDate(new Date()))
 const timeType = ref('default')
 const timeTypeOptions = [
@@ -41,7 +117,10 @@ const timeTypeOptions = [
   { label: '日期时间', value: 'datetime' },
 ]
 
-const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
+const idmv = [
+  { label: 'idm2', value: 'idm2' },
+  { label: 'idm3', value: 'idm3' },
+]
 </script>
 
 <template>
@@ -57,7 +136,11 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
     }"
   >
     <n-form-item label="事件名">
-      <n-input v-model:value="data.event" placeholder="输入事件名" />
+      <n-input
+        v-model:value="data.event"
+        placeholder="输入事件名"
+        :disabled="props.saType !== 'track'"
+      />
     </n-form-item>
     <n-form-item label="时间戳">
       <n-input-group>
@@ -68,9 +151,10 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
           disabled
           :style="{ width: '80%' }"
         />
-        <n-input
+        <n-input-number
           v-if="timeType === 'timestamp'"
           v-model:value="ts"
+          :show-button="false"
           placeholder="输入时间戳"
           :style="{ width: '80%' }"
         />
@@ -84,18 +168,18 @@ const idmv = [{ value: 'idm2' }, { value: 'idm3' }]
       </n-input-group>
     </n-form-item>
     <n-form-item label="IDM 版本">
-      <n-radio-group v-model:value="data.idm">
+      <n-radio-group v-model:value="data.idmv">
         <n-space>
           <n-radio v-for="it in idmv" :key="it.value" :value="it.value">
-            {{ it.value }}
+            {{ it.label }}
           </n-radio>
         </n-space>
       </n-radio-group>
     </n-form-item>
-    <n-form-item label="distinct_id">
+    <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
     </n-form-item>
-    <n-form-item label="login_id" :show-require-mark="false">
+    <n-form-item label="login_id" v-show="'track_signup' === props.saType">
       <n-input v-model:value="data.login_id" placeholder="login_id" />
     </n-form-item>
   </n-form>
