@@ -17,7 +17,7 @@ const serverURL = ref('https://webhook.site/74339f88-dafe-4947-b370-6ad410ba7cd0
 const saTypeOptions = [
   { label: 'track', value: 'track' },
   { label: 'track_signup', value: 'track_signup' },
-  { label: 'track_id_bind', value: 'track_id_bind', disabled: true },
+  { label: 'track_id_bind', value: 'track_id_bind' },
   { label: 'track_id_unbind', value: 'track_id_unbind', disabled: true },
   { label: 'profile_set', value: 'profile_set' },
   { label: 'profile_set_once', value: 'profile_set_once' },
@@ -37,10 +37,10 @@ const handleBaseTabData = (data: BaseTabData) => {
   baseTabData.value = data
 }
 
-const idmTabData = ref<OtherTabData[]>([])
-const handleIdmTabData = (data: OtherTabData[]) => {
-  idmTabData.value = data
-}
+// const idmTabData = ref<OtherTabData[]>([])
+// const handleIdmTabData = (data: OtherTabData[]) => {
+//   idmTabData.value = data
+// }
 
 const customTabData = ref<OtherTabData[]>([])
 const handleCustomTabData = (data: OtherTabData[]) => {
@@ -48,14 +48,14 @@ const handleCustomTabData = (data: OtherTabData[]) => {
 }
 
 const send = () => {
-  let identities: Record<string, string> = {}
-  if (baseTabData.value?.idmv === 'idm3') {
-    identities = Object.fromEntries(
-      idmTabData.value
-        .filter(({ pKey, pValue }) => !StringUtils.isEmpty(pKey) && pValue !== null)
-        .map(({ pKey, pValue }) => [pKey, pValue]),
-    )
-  }
+  // let identities: Record<string, string> = {}
+  // if ('track_id_bind' === saType.value || 'track_id_unbind' === saType.value) {
+  //   identities = Object.fromEntries(
+  //     idmTabData.value
+  //       .filter(({ pKey, pValue }) => !StringUtils.isEmpty(pKey) && pValue !== null)
+  //       .map(({ pKey, pValue }) => [pKey, pValue]),
+  //   )
+  // }
 
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
@@ -90,7 +90,7 @@ const send = () => {
   })
 
   if (StringUtils.isNotEmpty(baseTabData.value!.distinct_id)) {
-    sensors.identify(baseTabData.value!.distinct_id!, false)
+    sensors.identify(baseTabData.value!.distinct_id, false)
   }
 
   if ('track' === saType.value) {
@@ -100,7 +100,8 @@ const send = () => {
   } else if ('track_signup' === saType.value) {
     sensors.login(baseTabData.value!.login_id)
   } else if ('track_id_bind' === saType.value) {
-    console.log('暂未支持')
+    sensors.bind("xxx", "csaca")
+    sensors.bind("fff", "sss")
   } else if ('track_id_unbind' === saType.value) {
     console.log('暂未支持')
   } else if ('profile_set' === saType.value) {
@@ -157,7 +158,7 @@ const changeBodyBg = () => {
             name="idm"
             display-directive="show"
             tab="ID关联"
-            :disabled="'idm2' === baseTabData?.idmv"
+            :disabled="'track_id_bind' !== saType && 'track_id_unbind' !== saType"
           >
             <IdmTab @updateData="handleIdmTabData" />
           </n-tab-pane> -->

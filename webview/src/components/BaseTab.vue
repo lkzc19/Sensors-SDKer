@@ -59,7 +59,6 @@ const data = ref<BaseTabData>({
   item_type: '',
   item_id: '',
   time: '',
-  idmv: 'idm2',
   distinct_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
   login_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
 })
@@ -180,15 +179,6 @@ const idmv = [
           :style="{ width: '80%' }"
         />
       </n-input-group>
-    </n-form-item>
-    <n-form-item label="IDM 版本">
-      <n-radio-group v-model:value="data.idmv">
-        <n-space>
-          <n-radio v-for="it in idmv" :key="it.value" :value="it.value">
-            {{ it.label }}
-          </n-radio>
-        </n-space>
-      </n-radio-group>
     </n-form-item> -->
     <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />

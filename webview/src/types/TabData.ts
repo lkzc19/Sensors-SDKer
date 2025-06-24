@@ -3,7 +3,6 @@ export interface BaseTabData {
   item_type: string;
   item_id: string;
   time: string;
-  idmv: string;
   distinct_id: string;
   login_id: string;
 }
