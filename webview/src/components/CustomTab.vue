@@ -1,9 +1,22 @@
 <script setup lang="ts">
+import type { VNodeArrayChildren } from 'vue'
 import { ref, computed, h, watch } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
-import { NInputGroup, NInput, NInputNumber, NSelect, NButton, NDatePicker } from 'naive-ui'
+import {
+  NInputGroup,
+  NInputGroupLabel,
+  NInput,
+  NInputNumber,
+  NSelect,
+  NButton,
+  NDatePicker,
+} from 'naive-ui'
 
 import type { OtherTabData } from '@/types/TabData'
+
+const props = defineProps<{
+  saType: string
+}>()
 
 const kTypeOptions = [
   { label: '字符串', value: 'String' },
@@ -63,8 +76,9 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
     title: '属性名',
     key: 'key',
     width: '45%',
-    render: (row, index) =>
-      h(NInputGroup, () => [
+    render: (row, index) => {
+      const group: VNodeArrayChildren = []
+      group.push(
         h(NInput, {
           value: row.pKey,
           style: 'width: 90%',
@@ -73,22 +87,60 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
             checkAndAddRow()
           },
         }),
-        h(NSelect, {
-          value: row.pType,
-          style: 'width: 10%',
-          options: kTypeOptions,
-          onUpdateValue: (v) => {
-            data.value[index].pValue = null
-            data.value[index].pType = v
-          },
-        }),
-      ]),
+      )
+
+      if ('profile_increment' === props.saType) {
+        group.push(
+          h(
+            NInputGroupLabel,
+            {
+              style: 'width: 10%; min-width: 100px',
+            },
+            () => '数值',
+          ),
+        )
+      } else {
+        group.push(
+          h(NSelect, {
+            value: row.pType,
+            style: 'width: 10%; min-width: 100px',
+            options: kTypeOptions,
+            onUpdateValue: (v) => {
+              data.value[index].pValue = null
+              data.value[index].pType = v
+            },
+          }),
+        )
+      }
+
+      return h(NInputGroup, () => group)
+    },
   },
   {
     title: '属性值',
     key: 'value',
     width: '45%',
     render: (row, index) => {
+      if (
+        'profile_unset' === props.saType ||
+        'item_set' === props.saType ||
+        'item_delete' === props.saType
+      ) {
+        return h(NInput, {
+          placeholder: `${props.saType} 不需要属性值`,
+        })
+      }
+
+      if ('profile_increment' === props.saType) {
+        return h(NInputNumber, {
+          value: row.pValue,
+          onUpdateValue: (v) => {
+            data.value[index].pValue = v
+            checkAndAddRow()
+          },
+        })
+      }
+
       if ('Number' === row.pType) {
         return h(NInputNumber, {
           value: row.pValue,

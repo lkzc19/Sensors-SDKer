@@ -135,7 +135,7 @@ const idmv = [
       maxWidth: '640px',
     }"
   >
-    <n-form-item label="事件名">
+    <n-form-item label="事件名" v-show="props.saType.startsWith('track')">
       <n-input
         v-model:value="data.event"
         placeholder="输入事件名"

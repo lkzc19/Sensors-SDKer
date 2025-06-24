@@ -22,11 +22,11 @@ const saTypeOptions = [
   { label: 'profile_set', value: 'profile_set' },
   { label: 'profile_set_once', value: 'profile_set_once' },
   { label: 'profile_append', value: 'profile_append' },
-  { label: 'profile_increment', value: 'profile_increment', disabled: true },
-  { label: 'profile_unset', value: 'profile_unset', disabled: true },
-  { label: 'profile_delete', value: 'profile_delete', disabled: true },
-  { label: 'item_set', value: 'item_set', disabled: true },
-  { label: 'item_delete', value: 'item_delete', disabled: true },
+  { label: 'profile_increment', value: 'profile_increment' },
+  { label: 'profile_unset', value: 'profile_unset' },
+  { label: 'profile_delete', value: 'profile_delete' },
+  { label: 'item_set', value: 'item_set' },
+  { label: 'item_delete', value: 'item_delete' },
 ]
 const saType = ref('track')
 
@@ -59,12 +59,17 @@ const send = () => {
 
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
-      if (StringUtils.isEmpty(pKey) || pValue === null) {
-        return r
-      }
-
-      if ('Bool' === pType) {
-        pValue = pValue === 'true'
+      if ('profile_increment' === saType.value) {
+        if (StringUtils.isEmpty(pKey)) {
+          return r
+        }
+      } else {
+        if (StringUtils.isEmpty(pKey) || pValue === null) {
+          return r
+        }
+        if ('Bool' === pType) {
+          pValue = pValue === 'true'
+        }
       }
 
       r[pKey] = pValue
@@ -72,6 +77,7 @@ const send = () => {
     },
     {} as Record<string, any>,
   )
+  console.log(properties)
 
   sensors.init({
     server_url: serverURL.value,
@@ -84,7 +90,7 @@ const send = () => {
   })
 
   if (StringUtils.isNotEmpty(baseTabData.value!.distinct_id)) {
-    console.log(sensors.identify(baseTabData.value!.distinct_id!, false))
+    sensors.identify(baseTabData.value!.distinct_id!, false)
   }
 
   if ('track' === saType.value) {
@@ -104,8 +110,7 @@ const send = () => {
   } else if ('profile_append' === saType.value) {
     sensors.appendProfile(properties)
   } else if ('profile_increment' === saType.value) {
-    console.log('暂未支持')
-    // sensors.incrementProfile(properties)
+    sensors.incrementProfile(properties)
   } else if ('profile_unset' === saType.value) {
     console.log('暂未支持')
     // sensors.unsetProfile(properties)
@@ -143,12 +148,21 @@ const send = () => {
               name="idm"
               display-directive="show"
               tab="ID关联"
-              :disabled="baseTabData?.idmv === 'idm2'"
+              :disabled="'idm2' === baseTabData?.idmv"
             >
               <IdmTab @updateData="handleIdmTabData" />
             </n-tab-pane>
-            <n-tab-pane name="custom" display-directive="show" tab="自定义属性">
-              <CustomTab @updateData="handleCustomTabData" />
+            <n-tab-pane
+              name="custom"
+              display-directive="show"
+              tab="自定义属性"
+              :disabled="'profile_delete' === saType || 'item_delete' === saType"
+            >
+              <CustomTab
+                @updateData="handleCustomTabData"
+                :saType="saType"
+                v-show="'profile_delete' !== saType && 'item_delete' !== saType"
+              />
             </n-tab-pane>
           </n-tabs>
         </n-card>

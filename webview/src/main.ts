@@ -10,9 +10,10 @@ import {
   NConfigProvider,
   NSpace,
   NButton,
-
-  NInputGroup, NInput, NInputNumber,
-
+  NInputGroup,
+  NInputGroupLabel,
+  NInput,
+  NInputNumber,
   NSelect,
   NCard,
   NTabs,
@@ -23,18 +24,31 @@ import {
   NSwitch,
   NRadio,
   NRadioGroup,
-
-  NDatePicker, NTimePicker,
+  NDatePicker,
+  NTimePicker,
 } from 'naive-ui'
 
 const naive = create({
   components: [
     NConfigProvider,
     NSpace,
-    NInputGroup, NInputNumber, NInput,
-    NButton, NSelect, NCard, NTabs, NTabPane, NForm, NFormItem, NDataTable, NSwitch,
-    NRadio, NRadioGroup,
-    NDatePicker, NTimePicker
+    NInputGroup,
+    NInputGroupLabel,
+    NInputNumber,
+    NInput,
+    NButton,
+    NSelect,
+    NCard,
+    NTabs,
+    NTabPane,
+    NForm,
+    NFormItem,
+    NDataTable,
+    NSwitch,
+    NRadio,
+    NRadioGroup,
+    NDatePicker,
+    NTimePicker,
   ],
 })
 
