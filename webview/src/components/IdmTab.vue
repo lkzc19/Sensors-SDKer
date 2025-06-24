@@ -100,5 +100,6 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
     :data="data"
     :row-key="(data: OtherTabData) => data.index"
     :single-line="false"
+    size="small"
   />
 </template>

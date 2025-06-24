@@ -123,10 +123,10 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
     render: (row, index) => {
       if (
         'profile_unset' === props.saType ||
-        'item_set' === props.saType ||
         'item_delete' === props.saType
       ) {
         return h(NInput, {
+          disabled: true,
           placeholder: `${props.saType} 不需要属性值`,
         })
       }

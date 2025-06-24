@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { zhCN, dateZhCN } from 'naive-ui'
+import { zhCN, dateZhCN, darkTheme } from 'naive-ui'
 
 import sensors from 'sa-sdk-javascript'
 
@@ -10,9 +10,9 @@ import type { BaseTabData, OtherTabData } from '@/types/TabData'
 
 import BaseTab from './components/BaseTab.vue'
 import CustomTab from './components/CustomTab.vue'
-import IdmTab from './components/IdmTab.vue'
+// import IdmTab from './components/IdmTab.vue'
 
-const serverURL = ref('https://webhook.site/2cfbbc96-7a2c-440a-a4cc-d7adafb80d39')
+const serverURL = ref('https://webhook.site/74339f88-dafe-4947-b370-6ad410ba7cd0')
 
 const saTypeOptions = [
   { label: 'track', value: 'track' },
@@ -59,7 +59,7 @@ const send = () => {
 
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
-      if ('profile_increment' === saType.value) {
+      if ('profile_increment' === saType.value || 'profile_unset' === saType.value) {
         if (StringUtils.isEmpty(pKey)) {
           return r
         }
@@ -112,61 +112,69 @@ const send = () => {
   } else if ('profile_increment' === saType.value) {
     sensors.incrementProfile(properties)
   } else if ('profile_unset' === saType.value) {
-    console.log('暂未支持')
-    // sensors.unsetProfile(properties)
+    sensors.unsetProfile(Object.keys(properties))
   } else if ('profile_delete' === saType.value) {
-    console.log('暂未支持')
-    // sensors.deleteProfile()
+    sensors.deleteProfile()
   } else if ('item_set' === saType.value) {
-    console.log('暂未支持')
-    // sensors.setItem(properties)
+    sensors.setItem(baseTabData.value!.item_type, baseTabData.value!.item_id, properties)
   } else if ('item_delete' === saType.value) {
-    console.log('暂未支持')
-    // sensors.deleteItem(properties)
+    sensors.deleteItem(baseTabData.value!.item_type, baseTabData.value!.item_id)
+  }
+}
+
+const bg = ref('白')
+
+const changeBodyBg = () => {
+  if (document.body.style.backgroundColor === 'rgb(41, 41, 41)') {
+    document.body.style.backgroundColor = '#fff'
+    bg.value = '黑'
+  } else {
+    document.body.style.backgroundColor = '#292929'
+    bg.value = '白'
   }
 }
 </script>
 
 <template>
-  <n-config-provider :locale="zhCN" :date-locale="dateZhCN">
-    <div class="sa-container">
-      <div class="sa-header">
-        <n-space vertical>
-          <n-select v-model:value="saType" :options="saTypeOptions" size="large" />
-        </n-space>
-        <n-input type="text" size="large" placeholder="大" v-model:value="serverURL" />
-        <n-button type="success" size="large" @click="send">上 报</n-button>
-      </div>
-
-      <div class="sa-main">
-        <n-card style="margin-bottom: 16px">
-          <n-tabs type="line">
-            <n-tab-pane name="base" display-directive="show" tab="基础属性">
-              <BaseTab @updateData="handleBaseTabData" :saType="saType" />
-            </n-tab-pane>
-            <n-tab-pane
-              name="idm"
-              display-directive="show"
-              tab="ID关联"
-              :disabled="'idm2' === baseTabData?.idmv"
-            >
-              <IdmTab @updateData="handleIdmTabData" />
-            </n-tab-pane>
-            <n-tab-pane
-              name="custom"
-              display-directive="show"
-              tab="自定义属性"
-              :disabled="'profile_delete' === saType || 'item_delete' === saType"
-            >
-              <CustomTab
-                @updateData="handleCustomTabData"
-                :saType="saType"
-                v-show="'profile_delete' !== saType && 'item_delete' !== saType"
-              />
-            </n-tab-pane>
-          </n-tabs>
-        </n-card>
-      </div>
+  <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme="darkTheme">
+    <n-back-top :right="100" show @click="changeBodyBg">
+      <div>变 {{ bg }}</div>
+    </n-back-top>
+    <div class="sa-header">
+      <n-space vertical>
+        <n-select v-model:value="saType" :options="saTypeOptions" size="large" />
+      </n-space>
+      <n-input type="text" size="large" placeholder="大" v-model:value="serverURL" />
+      <n-button type="success" size="large" @click="send">上 报</n-button>
+    </div>
+    <div>
+      <n-card>
+        <n-tabs>
+          <n-tab-pane name="base" display-directive="show" tab="基础属性">
+            <BaseTab @updateData="handleBaseTabData" :saType="saType" />
+          </n-tab-pane>
+          <!-- <n-tab-pane
+            name="idm"
+            display-directive="show"
+            tab="ID关联"
+            :disabled="'idm2' === baseTabData?.idmv"
+          >
+            <IdmTab @updateData="handleIdmTabData" />
+          </n-tab-pane> -->
+          <n-tab-pane
+            name="custom"
+            display-directive="show"
+            tab="自定义属性"
+            :disabled="'profile_delete' === saType || 'item_delete' === saType"
+          >
+            <CustomTab
+              @updateData="handleCustomTabData"
+              :saType="saType"
+              v-show="'profile_delete' !== saType && 'item_delete' !== saType"
+            />
+          </n-tab-pane>
+        </n-tabs>
+      </n-card>
     </div>
   </n-config-provider>
 </template>
@@ -175,14 +183,8 @@ const send = () => {
 .sa-header {
   display: flex;
   gap: 8px;
-  padding: 12px;
+  padding-bottom: 20px;
   align-items: stretch;
-}
-
-.sa-main {
-  flex: 1;
-  overflow: auto;
-  padding: 12px;
 }
 
 .sa-header .n-select {

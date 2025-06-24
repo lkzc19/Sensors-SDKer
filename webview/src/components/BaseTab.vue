@@ -56,6 +56,8 @@ const distinct_id_array = [
 
 const data = ref<BaseTabData>({
   event: event_array[Math.floor(Math.random() * event_array.length)],
+  item_type: '',
+  item_id: '',
   time: '',
   idmv: 'idm2',
   distinct_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
@@ -66,8 +68,8 @@ let event_tmp = data.value.event
 
 watch(
   () => props.saType,
-  (newVal) => {
-    if ('track' !== newVal) {
+  (newVal, oldVal) => {
+    if ('track' === oldVal && 'track' !== newVal) {
       event_tmp = data.value.event
     }
     if ('track' === newVal) {
@@ -135,14 +137,26 @@ const idmv = [
       maxWidth: '640px',
     }"
   >
-    <n-form-item label="事件名" v-show="props.saType.startsWith('track')">
+    <n-form-item label="event" v-show="props.saType.startsWith('track')">
       <n-input
         v-model:value="data.event"
         placeholder="输入事件名"
         :disabled="props.saType !== 'track'"
       />
     </n-form-item>
-    <n-form-item label="时间戳">
+    <n-form-item label="item_type" v-show="props.saType.startsWith('item')">
+      <n-input
+        v-model:value="data.item_type"
+        placeholder="输入物品所属类型"
+      />
+    </n-form-item>
+    <n-form-item label="item_id" v-show="props.saType.startsWith('item')">
+      <n-input
+        v-model:value="data.item_id"
+        placeholder="输入物品ID"
+      />
+    </n-form-item>
+    <!-- <n-form-item label="时间戳">
       <n-input-group>
         <n-select :style="{ width: '20%' }" :options="timeTypeOptions" v-model:value="timeType" />
         <n-input
@@ -175,7 +189,7 @@ const idmv = [
           </n-radio>
         </n-space>
       </n-radio-group>
-    </n-form-item>
+    </n-form-item> -->
     <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
     </n-form-item>
