@@ -112,24 +112,23 @@ const logout = () => {
   sensors.logout()
 }
 
-const bg = ref('白')
-
-const changeBodyBg = () => {
-  if (document.body.style.backgroundColor === 'rgb(41, 41, 41)') {
-    document.body.style.backgroundColor = '#fff'
-    bg.value = '黑'
-  } else {
-    document.body.style.backgroundColor = '#292929'
-    bg.value = '白'
-  }
-}
+// const bg = ref('白')
+// const changeBodyBg = () => {
+//   if (document.body.style.backgroundColor === 'rgb(41, 41, 41)') {
+//     document.body.style.backgroundColor = '#fff'
+//     bg.value = '黑'
+//   } else {
+//     document.body.style.backgroundColor = '#292929'
+//     bg.value = '白'
+//   }
+// }
 </script>
 
 <template>
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme="darkTheme">
-    <n-back-top :right="100" show @click="changeBodyBg">
+    <!-- <n-back-top :right="100" show @click="changeBodyBg">
       <div>变 {{ bg }}</div>
-    </n-back-top>
+    </n-back-top> -->
     <div class="sa-header">
       <n-space vertical>
         <n-select v-model:value="saType" :options="saTypeOptions" size="large" />
