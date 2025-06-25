@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits, watch } from 'vue'
 
-import { NForm, NFormItem, NInput } from 'naive-ui'
-
 import type { BaseTabData } from '@/types/TabData'
 
 const props = defineProps<{
