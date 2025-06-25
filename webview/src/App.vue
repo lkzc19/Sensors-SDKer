@@ -10,7 +10,6 @@ import type { BaseTabData, OtherTabData } from '@/types/TabData'
 
 import BaseTab from './components/BaseTab.vue'
 import CustomTab from './components/CustomTab.vue'
-// import IdmTab from './components/IdmTab.vue'
 
 const serverURL = ref('https://webhook.site/74339f88-dafe-4947-b370-6ad410ba7cd0')
 
@@ -30,17 +29,12 @@ const saTypeOptions = [
 ]
 const saType = ref('track')
 
-// 4个tab中收集上的数据
+// 2个tab中收集上的数据
 
 const baseTabData = ref<BaseTabData>()
 const handleBaseTabData = (data: BaseTabData) => {
   baseTabData.value = data
 }
-
-// const idmTabData = ref<OtherTabData[]>([])
-// const handleIdmTabData = (data: OtherTabData[]) => {
-//   idmTabData.value = data
-// }
 
 const customTabData = ref<OtherTabData[]>([])
 const handleCustomTabData = (data: OtherTabData[]) => {
@@ -48,15 +42,6 @@ const handleCustomTabData = (data: OtherTabData[]) => {
 }
 
 const send = () => {
-  // let identities: Record<string, string> = {}
-  // if ('track_id_bind' === saType.value || 'track_id_unbind' === saType.value) {
-  //   identities = Object.fromEntries(
-  //     idmTabData.value
-  //       .filter(({ pKey, pValue }) => !StringUtils.isEmpty(pKey) && pValue !== null)
-  //       .map(({ pKey, pValue }) => [pKey, pValue]),
-  //   )
-  // }
-
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
       if ('profile_increment' === saType.value || 'profile_unset' === saType.value) {
@@ -154,14 +139,6 @@ const changeBodyBg = () => {
           <n-tab-pane name="base" display-directive="show" tab="基础属性">
             <BaseTab @updateData="handleBaseTabData" :saType="saType" />
           </n-tab-pane>
-          <!-- <n-tab-pane
-            name="idm"
-            display-directive="show"
-            tab="ID关联"
-            :disabled="'track_id_bind' !== saType && 'track_id_unbind' !== saType"
-          >
-            <IdmTab @updateData="handleIdmTabData" />
-          </n-tab-pane> -->
           <n-tab-pane
             name="custom"
             display-directive="show"
