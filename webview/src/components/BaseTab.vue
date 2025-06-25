@@ -54,6 +54,8 @@ const distinct_id_array = [
 
 const data = ref<BaseTabData>({
   event: event_array[Math.floor(Math.random() * event_array.length)],
+  idm_key: '',
+  idm_value: '',
   item_type: '',
   item_id: '',
   time: '',
@@ -116,6 +118,18 @@ const rules = {
         v-model:value="data.event"
         placeholder="输入事件名"
         :disabled="props.saType !== 'track'"
+      />
+    </n-form-item>
+    <n-form-item label="idm_key" v-show="props.saType.endsWith('bind')">
+      <n-input
+        v-model:value="data.idm_key"
+        :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
+      />
+    </n-form-item>
+    <n-form-item label="idm_value" v-show="props.saType.endsWith('bind')">
+      <n-input
+        v-model:value="data.idm_value"
+        :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
       />
     </n-form-item>
     <n-form-item label="item_type" v-show="props.saType.startsWith('item')">

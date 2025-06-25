@@ -1,5 +1,7 @@
 export interface BaseTabData {
   event: string;
+  idm_key: string;
+  idm_value: string;
   item_type: string;
   item_id: string;
   time: string;
