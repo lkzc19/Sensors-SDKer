@@ -10,7 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     BaseTab: typeof import('./src/components/BaseTab.vue')['default']
     CustomTab: typeof import('./src/components/CustomTab.vue')['default']
-    NBackTop: typeof import('naive-ui')['NBackTop']
     NButton: typeof import('naive-ui')['NButton']
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']
