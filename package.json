@@ -4,6 +4,7 @@
   "description": "使用该插件可以方便上报事件到神策。",
   "version": "0.1.0",
   "publisher": "z-drugs",
+  "repository": "https://github.com/lkzc19/Sensors-SDKer",
   "engines": {
     "vscode": "^1.100.0"
   },
