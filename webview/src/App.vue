@@ -12,13 +12,13 @@ import BaseTab from './components/BaseTab.vue'
 import CustomTab from './components/CustomTab.vue'
 // import IdmTab from './components/IdmTab.vue'
 
-const serverURL = ref('https://webhook.site/74339f88-dafe-4947-b370-6ad410ba7cd0')
+const serverURL = ref('')
 
 const saTypeOptions = [
   { label: 'track', value: 'track' },
   { label: 'track_signup', value: 'track_signup' },
   { label: 'track_id_bind', value: 'track_id_bind' },
-  { label: 'track_id_unbind', value: 'track_id_unbind', disabled: true },
+  { label: 'track_id_unbind', value: 'track_id_unbind' },
   { label: 'profile_set', value: 'profile_set' },
   { label: 'profile_set_once', value: 'profile_set_once' },
   { label: 'profile_append', value: 'profile_append' },

@@ -1,6 +1,5 @@
 # Sensors-SDKer
 
-参考项目
+使用该插件可以方便上报事件到神策。
 
-- [vscode中的postman postcode](https://github.com/rohinivsenthil/postcode)
-- [官方集成Vue例子](https://github.com/microsoft/vscode-webview-ui-toolkit-samples/tree/main/frameworks/hello-world-vue)
+该插件使用神策的[JS SDK](https://github.com/sensorsdata/sa-sdk-javascript)上报数据，当前版本[1.27.6](https://www.npmjs.com/package/sa-sdk-javascript/v/1.27.6)。
