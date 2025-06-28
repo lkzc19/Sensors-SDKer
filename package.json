@@ -1,8 +1,8 @@
 {
   "name": "sensors-sdker",
   "displayName": "Sensors SDKer",
-  "description": "",
-  "version": "0.0.1",
+  "description": "使用该插件可以方便上报事件到神策。",
+  "version": "0.1.0",
   "publisher": "z-drugs",
   "engines": {
     "vscode": "^1.100.0"
