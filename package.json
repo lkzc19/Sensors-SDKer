@@ -2,15 +2,24 @@
   "name": "sensors-sdker",
   "displayName": "Sensors SDKer",
   "description": "使用该插件可以方便上报事件到神策。",
+  "icon": "images/icon.png",
   "version": "0.1.0",
   "publisher": "z-drugs",
-  "repository": "https://github.com/lkzc19/Sensors-SDKer",
+
+  "author": {
+    "name": "lkzc19"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/lkzc19/Sensors-SDKer/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkzc19/Sensors-SDKer"
+  },
+  
   "engines": {
     "vscode": "^1.100.0"
   },
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
