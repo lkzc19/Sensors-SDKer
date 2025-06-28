@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits, watch } from 'vue'
 
-import { NForm, NFormItem, NInput } from 'naive-ui'
-
 import type { BaseTabData } from '@/types/TabData'
 
 const props = defineProps<{
@@ -56,6 +54,8 @@ const distinct_id_array = [
 
 const data = ref<BaseTabData>({
   event: event_array[Math.floor(Math.random() * event_array.length)],
+  idm_key: '',
+  idm_value: '',
   item_type: '',
   item_id: '',
   time: '',
@@ -99,29 +99,6 @@ const rules = {
   time: { required: true },
 }
 
-function formatDate(date: Date) {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  const seconds = String(date.getSeconds()).padStart(2, '0')
-  return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
-}
-
-const ts = ref(new Date().getTime())
-const dt = ref(formatDate(new Date()))
-const timeType = ref('default')
-const timeTypeOptions = [
-  { label: '默认时间', value: 'default' },
-  { label: '时间戳', value: 'timestamp' },
-  { label: '日期时间', value: 'datetime' },
-]
-
-const idmv = [
-  { label: 'idm2', value: 'idm2' },
-  { label: 'idm3', value: 'idm3' },
-]
 </script>
 
 <template>
@@ -143,6 +120,18 @@ const idmv = [
         :disabled="props.saType !== 'track'"
       />
     </n-form-item>
+    <n-form-item label="idm_key" v-show="props.saType.endsWith('bind')">
+      <n-input
+        v-model:value="data.idm_key"
+        :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
+      />
+    </n-form-item>
+    <n-form-item label="idm_value" v-show="props.saType.endsWith('bind')">
+      <n-input
+        v-model:value="data.idm_value"
+        :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
+      />
+    </n-form-item>
     <n-form-item label="item_type" v-show="props.saType.startsWith('item')">
       <n-input
         v-model:value="data.item_type"
@@ -155,31 +144,6 @@ const idmv = [
         placeholder="输入物品ID"
       />
     </n-form-item>
-    <!-- <n-form-item label="时间戳">
-      <n-input-group>
-        <n-select :style="{ width: '20%' }" :options="timeTypeOptions" v-model:value="timeType" />
-        <n-input
-          v-if="timeType === 'default'"
-          placeholder="客户端上报的时间"
-          disabled
-          :style="{ width: '80%' }"
-        />
-        <n-input-number
-          v-if="timeType === 'timestamp'"
-          v-model:value="ts"
-          :show-button="false"
-          placeholder="输入时间戳"
-          :style="{ width: '80%' }"
-        />
-        <n-date-picker
-          v-if="timeType === 'datetime'"
-          v-model:formatted-value="dt"
-          value-format="yyyy.MM.dd HH:mm:ss"
-          type="datetime"
-          :style="{ width: '80%' }"
-        />
-      </n-input-group>
-    </n-form-item> -->
     <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
       <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
     </n-form-item>

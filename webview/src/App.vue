@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 
 import { zhCN, dateZhCN, darkTheme } from 'naive-ui'
+import { ChevronDown } from '@vicons/ionicons5'
 
 import sensors from 'sa-sdk-javascript'
 
@@ -10,7 +11,6 @@ import type { BaseTabData, OtherTabData } from '@/types/TabData'
 
 import BaseTab from './components/BaseTab.vue'
 import CustomTab from './components/CustomTab.vue'
-// import IdmTab from './components/IdmTab.vue'
 
 const serverURL = ref('')
 
@@ -18,6 +18,7 @@ const saTypeOptions = [
   { label: 'track', value: 'track' },
   { label: 'track_signup', value: 'track_signup' },
   { label: 'track_id_bind', value: 'track_id_bind' },
+  { label: 'track_id_unbind', value: 'track_id_unbind' },
   { label: 'track_id_unbind', value: 'track_id_unbind' },
   { label: 'profile_set', value: 'profile_set' },
   { label: 'profile_set_once', value: 'profile_set_once' },
@@ -30,17 +31,12 @@ const saTypeOptions = [
 ]
 const saType = ref('track')
 
-// 4个tab中收集上的数据
+// 2个tab中收集上的数据
 
 const baseTabData = ref<BaseTabData>()
 const handleBaseTabData = (data: BaseTabData) => {
   baseTabData.value = data
 }
-
-// const idmTabData = ref<OtherTabData[]>([])
-// const handleIdmTabData = (data: OtherTabData[]) => {
-//   idmTabData.value = data
-// }
 
 const customTabData = ref<OtherTabData[]>([])
 const handleCustomTabData = (data: OtherTabData[]) => {
@@ -48,15 +44,6 @@ const handleCustomTabData = (data: OtherTabData[]) => {
 }
 
 const send = () => {
-  // let identities: Record<string, string> = {}
-  // if ('track_id_bind' === saType.value || 'track_id_unbind' === saType.value) {
-  //   identities = Object.fromEntries(
-  //     idmTabData.value
-  //       .filter(({ pKey, pValue }) => !StringUtils.isEmpty(pKey) && pValue !== null)
-  //       .map(({ pKey, pValue }) => [pKey, pValue]),
-  //   )
-  // }
-
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
       if ('profile_increment' === saType.value || 'profile_unset' === saType.value) {
@@ -100,10 +87,9 @@ const send = () => {
   } else if ('track_signup' === saType.value) {
     sensors.login(baseTabData.value!.login_id)
   } else if ('track_id_bind' === saType.value) {
-    sensors.bind("xxx", "csaca")
-    sensors.bind("fff", "sss")
+    sensors.bind(baseTabData.value!.idm_key, baseTabData.value!.idm_value)
   } else if ('track_id_unbind' === saType.value) {
-    console.log('暂未支持')
+    sensors.unbind(baseTabData.value!.idm_key, baseTabData.value!.idm_value)
   } else if ('profile_set' === saType.value) {
     sensors.setProfile(properties)
   } else if ('profile_set_once' === saType.value) {
@@ -123,30 +109,51 @@ const send = () => {
   }
 }
 
-const bg = ref('白')
-
-const changeBodyBg = () => {
-  if (document.body.style.backgroundColor === 'rgb(41, 41, 41)') {
-    document.body.style.backgroundColor = '#fff'
-    bg.value = '黑'
-  } else {
-    document.body.style.backgroundColor = '#292929'
-    bg.value = '白'
-  }
+const logout = () => {
+  sensors.logout()
 }
+
+// const bg = ref('白')
+// const changeBodyBg = () => {
+//   if (document.body.style.backgroundColor === 'rgb(41, 41, 41)') {
+//     document.body.style.backgroundColor = '#fff'
+//     bg.value = '黑'
+//   } else {
+//     document.body.style.backgroundColor = '#292929'
+//     bg.value = '白'
+//   }
+// }
 </script>
 
 <template>
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme="darkTheme">
-    <n-back-top :right="100" show @click="changeBodyBg">
+    <!-- <n-back-top :right="100" show @click="changeBodyBg">
       <div>变 {{ bg }}</div>
-    </n-back-top>
+    </n-back-top> -->
     <div class="sa-header">
       <n-space vertical>
         <n-select v-model:value="saType" :options="saTypeOptions" size="large" />
       </n-space>
       <n-input type="text" size="large" placeholder="大" v-model:value="serverURL" />
-      <n-button type="success" size="large" @click="send">上 报</n-button>
+      <n-button-group size="large">
+        <n-button class="send" type="success" ghost @click="send" >上 报</n-button>
+        <n-dropdown
+          placement="bottom-end"
+          trigger="click"
+          size="large"
+          :options="[{label: '清除缓存(logout)',key: 'logout'}]"
+          @click="logout"
+        >
+          <n-button class="logout" type="success" ghost>
+            <template #icon>
+              <n-icon>
+                <ChevronDown />
+              </n-icon>
+            </template>
+          </n-button>  
+        </n-dropdown>
+      </n-button-group>
+
     </div>
     <div>
       <n-card>
@@ -154,14 +161,6 @@ const changeBodyBg = () => {
           <n-tab-pane name="base" display-directive="show" tab="基础属性">
             <BaseTab @updateData="handleBaseTabData" :saType="saType" />
           </n-tab-pane>
-          <!-- <n-tab-pane
-            name="idm"
-            display-directive="show"
-            tab="ID关联"
-            :disabled="'track_id_bind' !== saType && 'track_id_unbind' !== saType"
-          >
-            <IdmTab @updateData="handleIdmTabData" />
-          </n-tab-pane> -->
           <n-tab-pane
             name="custom"
             display-directive="show"
@@ -192,7 +191,11 @@ const changeBodyBg = () => {
   width: 160px;
 }
 
-.sa-header .n-button {
+.sa-header .n-button-group .send {
   width: 120px;
+}
+
+.sa-header .n-button-group .logout {
+  width: 40px;
 }
 </style>
