@@ -12,7 +12,7 @@ import type { BaseTabData, OtherTabData } from '@/types/TabData'
 import BaseTab from '@/components/BaseTab/index.vue'
 import CustomTab from '@/components/CustomTab.vue'
 
-const serverURL = ref('http://10.129.20.17:8106/sa?project=default')
+const serverURL = ref('')
 
 const saTypeOptions = [
   { label: 'track', value: 'track' },
