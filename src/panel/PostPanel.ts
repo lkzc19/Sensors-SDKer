@@ -3,8 +3,6 @@ import * as vscode from 'vscode';
 export class PostPanel {
 
   public static render(context: vscode.ExtensionContext) {
-    vscode.window.showInformationMessage("Welcome to Sensors-SDKer!");
-
     const panel = vscode.window.createWebviewPanel(
       "postPanel",
       "post",

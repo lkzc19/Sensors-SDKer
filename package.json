@@ -25,10 +25,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "sensors-sdker.ping",
-        "title": "Ping"
-      },
-      {
         "command": "sensors-sdker.post",
         "title": "Post"
       }
