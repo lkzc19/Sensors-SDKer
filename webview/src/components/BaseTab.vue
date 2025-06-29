@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, defineEmits, watch } from 'vue'
 
+import { SparklesSharp } from '@vicons/ionicons5'
+
 import type { BaseTabData } from '@/types/TabData'
 
 const props = defineProps<{

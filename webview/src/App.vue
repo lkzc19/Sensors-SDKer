@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 import { zhCN, dateZhCN, darkTheme } from 'naive-ui'
-import { ChevronDown } from '@vicons/ionicons5'
+import { ChevronDown, PaperPlaneSharp } from '@vicons/ionicons5'
 
 import sensors from 'sa-sdk-javascript'
 
@@ -42,7 +42,12 @@ const handleCustomTabData = (data: OtherTabData[]) => {
   customTabData.value = data
 }
 
+const loading = ref(false)
 const send = () => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 300)
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
       if ('profile_increment' === saType.value || 'profile_unset' === saType.value) {
@@ -133,17 +138,24 @@ const logout = () => {
       <n-space vertical>
         <n-select v-model:value="saType" :options="saTypeOptions" size="large" />
       </n-space>
-      <n-input type="text" size="large" placeholder="大" v-model:value="serverURL" />
+      <n-input type="text" size="large" placeholder="数据接收地址" v-model:value="serverURL" />
       <n-button-group size="large">
-        <n-button class="send" type="success" ghost @click="send">上 报</n-button>
+        <n-button class="send" :loading="loading" type="success" @click="send">
+          <template #icon>
+            <n-icon>
+              <PaperPlaneSharp />
+            </n-icon>
+          </template>
+          上 报
+        </n-button>
         <n-dropdown
           placement="bottom-end"
           trigger="click"
-          size="large"
+          size="medium"
           :options="[{ label: '清除缓存(logout)', key: 'logout' }]"
           @click="logout"
         >
-          <n-button class="logout" type="success" ghost>
+          <n-button class="logout" type="success" strong secondary>
             <template #icon>
               <n-icon>
                 <ChevronDown />
@@ -190,7 +202,7 @@ const logout = () => {
 }
 
 .sa-header .n-button-group .send {
-  width: 120px;
+  width: 110px;
 }
 
 .sa-header .n-button-group .logout {
