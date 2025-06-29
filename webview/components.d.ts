@@ -8,18 +8,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Basetab: typeof import('./src/components/BaseTab/basetab.vue')['default']
     BaseTab: typeof import('./src/components/BaseTab/index.vue')['default']
-    Btinput: typeof import('./src/components/BaseTab/btinput.vue')['default']
     BtInput: typeof import('./src/components/BaseTab/BtInput.vue')['default']
     CustomTab: typeof import('./src/components/CustomTab.vue')['default']
-    EventInput: typeof import('./src/components/EventInput.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDataTable: typeof import('naive-ui')['NDataTable']
-    NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
