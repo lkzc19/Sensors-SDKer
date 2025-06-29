@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, defineEmits, watch } from 'vue'
+import { ref, watch } from 'vue';
 
-import BtInput from './BtInput.vue'
-import type { BaseTabData } from '@/types/TabData'
-import * as ArrayUtils from '@/utils/ArrayUtils'
+import BtInput from './BtInput.vue';
+import type { BaseTabData } from '@/types/TabData';
+import * as ArrayUtils from '@/utils/ArrayUtils';
 
 const props = defineProps<{
-  saType: string
-}>()
+  saType: string;
+}>();
 
-import { EVENT_ARRAY, IDENTITIES_ARRAY } from '@/constants/r'
+import { EVENT_ARRAY, IDENTITIES_ARRAY } from '@/constants/r';
 
 const data = ref<BaseTabData>({
   event: ArrayUtils.getRandomElement(EVENT_ARRAY)!,
@@ -17,46 +17,45 @@ const data = ref<BaseTabData>({
   idm_value: '',
   item_type: '',
   item_id: '',
-  time: '',
   distinct_id: ArrayUtils.getRandomElement(IDENTITIES_ARRAY)!,
   login_id: ArrayUtils.getRandomElement(IDENTITIES_ARRAY)!,
-})
+});
 
-let event_tmp = data.value.event
+let event_tmp = data.value.event;
 
 watch(
   () => props.saType,
   (newVal, oldVal) => {
     if ('track' === oldVal && 'track' !== newVal) {
-      event_tmp = data.value.event
+      event_tmp = data.value.event;
     }
     if ('track' === newVal) {
-      data.value.event = event_tmp
+      data.value.event = event_tmp;
     } else if ('track_signup' === newVal) {
-      data.value.event = '$SignUp'
+      data.value.event = '$SignUp';
     } else if ('track_id_bind' === newVal) {
-      data.value.event = '$BindID'
+      data.value.event = '$BindID';
     } else if ('track_id_unbind' === newVal) {
-      data.value.event = '$UnbindID'
+      data.value.event = '$UnbindID';
     }
   },
-)
+);
 
-const emit = defineEmits(['updateData'])
+const emit = defineEmits(['updateData']);
 // 数据初始化后触发事件
-emit('updateData', data.value)
+emit('updateData', data.value);
 watch(
   data,
   (newVal: BaseTabData) => {
-    emit('updateData', newVal)
+    emit('updateData', newVal);
   },
   { deep: true },
-)
+);
 
 const rules = {
   event: { required: true },
   time: { required: true },
-}
+};
 </script>
 
 <template>

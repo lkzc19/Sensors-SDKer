@@ -4,7 +4,6 @@ export interface BaseTabData {
   idm_value: string;
   item_type: string;
   item_id: string;
-  time: string;
   distinct_id: string;
   login_id: string;
 }

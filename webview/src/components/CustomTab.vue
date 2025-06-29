@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { VNodeArrayChildren } from 'vue'
-import { ref, computed, h, watch } from 'vue'
-import type { DataTableColumns } from 'naive-ui'
+import type { VNodeArrayChildren } from 'vue';
+import { ref, computed, h, watch } from 'vue';
+import type { DataTableColumns } from 'naive-ui';
 import {
   NInputGroup,
   NInputGroupLabel,
@@ -10,13 +10,13 @@ import {
   NSelect,
   NButton,
   NDatePicker,
-} from 'naive-ui'
+} from 'naive-ui';
 
-import type { OtherTabData } from '@/types/TabData'
+import type { OtherTabData } from '@/types/TabData';
 
 const props = defineProps<{
-  saType: string
-}>()
+  saType: string;
+}>();
 
 const kTypeOptions = [
   { label: '字符串', value: 'String' },
@@ -24,70 +24,70 @@ const kTypeOptions = [
   { label: '布尔', value: 'Bool' },
   { label: '集合', value: 'List' },
   { label: '日期时间', value: 'Datetime' },
-]
+];
 
-const data = ref<OtherTabData[]>([{ index: 0, pKey: '', pValue: null, pType: 'String' }])
+const data = ref<OtherTabData[]>([{ index: 0, pKey: '', pValue: null, pType: 'String' }]);
 
-const emit = defineEmits(['updateData'])
+const emit = defineEmits(['updateData']);
 
 watch(
   data,
   (newVal: OtherTabData[]) => {
-    emit('updateData', newVal)
+    emit('updateData', newVal);
   },
   { deep: true },
-)
+);
 
 // 生成唯一key
 const generateKey = () => {
-  return data.value.length === 0 ? 0 : Math.max(...data.value.map((row) => row.index)) + 1
-}
+  return data.value.length === 0 ? 0 : Math.max(...data.value.map((row) => row.index)) + 1;
+};
 
 // 检查最后一行是否从无数据变为有数据，并添加新行
 const checkAndAddRow = () => {
-  const lastRow = data.value[data.value.length - 1]
+  const lastRow = data.value[data.value.length - 1];
   if (lastRow && (lastRow.pKey || lastRow.pValue)) {
-    addRow()
+    addRow();
   }
-}
+};
 
 // 新增行
 const addRow = () => {
   data.value.push({
     index: generateKey(),
     pKey: '',
-    pValue: '',
+    pValue: null,
     pType: 'String',
-  })
-}
+  });
+};
 
 // 删除行
 const delRow = (index: number) => {
-  data.value.splice(index, 1)
-}
+  data.value.splice(index, 1);
+};
 
 // 动态列配置
 const columns = computed<DataTableColumns<OtherTabData>>(() => [
   {
     type: 'selection',
-    width: '2%',
+    width: 20,
   },
   {
     title: '属性名',
     key: 'key',
     width: '45%',
     render: (row, index) => {
-      const group: VNodeArrayChildren = []
+      const group: VNodeArrayChildren = [];
       group.push(
         h(NInput, {
           value: row.pKey,
           style: 'width: 90%',
           onUpdateValue: (v) => {
-            data.value[index].pKey = v
-            checkAndAddRow()
+            data.value[index].pKey = v;
+            checkAndAddRow();
           },
         }),
-      )
+      );
 
       if ('profile_increment' === props.saType) {
         group.push(
@@ -98,7 +98,7 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
             },
             () => '数值',
           ),
-        )
+        );
       } else {
         group.push(
           h(NSelect, {
@@ -106,14 +106,14 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
             style: 'width: 10%; min-width: 100px',
             options: kTypeOptions,
             onUpdateValue: (v) => {
-              data.value[index].pValue = null
-              data.value[index].pType = v
+              data.value[index].pValue = null;
+              data.value[index].pType = v;
             },
           }),
-        )
+        );
       }
 
-      return h(NInputGroup, () => group)
+      return h(NInputGroup, () => group);
     },
   },
   {
@@ -121,34 +121,31 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
     key: 'value',
     width: '45%',
     render: (row, index) => {
-      if (
-        'profile_unset' === props.saType ||
-        'item_delete' === props.saType
-      ) {
+      if ('profile_unset' === props.saType || 'item_delete' === props.saType) {
         return h(NInput, {
           disabled: true,
           placeholder: `${props.saType} 不需要属性值`,
-        })
+        });
       }
 
       if ('profile_increment' === props.saType) {
         return h(NInputNumber, {
           value: row.pValue,
           onUpdateValue: (v) => {
-            data.value[index].pValue = v
-            checkAndAddRow()
+            data.value[index].pValue = v;
+            checkAndAddRow();
           },
-        })
+        });
       }
 
       if ('Number' === row.pType) {
         return h(NInputNumber, {
           value: row.pValue,
           onUpdateValue: (v) => {
-            data.value[index].pValue = v
-            checkAndAddRow()
+            data.value[index].pValue = v;
+            checkAndAddRow();
           },
-        })
+        });
       } else if ('Bool' === row.pType) {
         return h(NSelect, {
           value: row.pValue,
@@ -157,10 +154,10 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
             { label: 'false', value: 'false' },
           ],
           onUpdateValue: (v) => {
-            data.value[index].pValue = v
-            checkAndAddRow()
+            data.value[index].pValue = v;
+            checkAndAddRow();
           },
-        })
+        });
       } else if ('List' === row.pType) {
         return h(NSelect, {
           value: row.pValue,
@@ -169,11 +166,12 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
           tag: true,
           showArrow: false,
           show: false,
+          placeholder: '输入，按回车确认',
           onUpdateValue: (v) => {
-            data.value[index].pValue = v
-            checkAndAddRow()
+            data.value[index].pValue = v;
+            checkAndAddRow();
           },
-        })
+        });
       } else if ('Datetime' === row.pType) {
         return h(NInputGroup, () => [
           h(NDatePicker, {
@@ -182,19 +180,19 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
             valueFormat: 'yyyy.MM.dd HH:mm:ss',
             style: 'width: 100%',
             onUpdateValue: (v) => {
-              data.value[index].pValue = v
-              checkAndAddRow()
+              data.value[index].pValue = v;
+              checkAndAddRow();
             },
           }),
-        ])
+        ]);
       } else {
         return h(NInput, {
           value: row.pValue,
           onUpdateValue: (v) => {
-            data.value[index].pValue = v
-            checkAndAddRow()
+            data.value[index].pValue = v;
+            checkAndAddRow();
           },
-        })
+        });
       }
     },
   },
@@ -204,7 +202,7 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
     width: '8%',
     render: (row, index) => {
       if (index === data.value.length - 1) {
-        return null
+        return null;
       }
       return h(
         NButton,
@@ -214,10 +212,10 @@ const columns = computed<DataTableColumns<OtherTabData>>(() => [
           onClick: () => delRow(index),
         },
         () => '删除',
-      )
+      );
     },
   },
-])
+]);
 </script>
 
 <template>

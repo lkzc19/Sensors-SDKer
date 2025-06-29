@@ -48,6 +48,7 @@ const send = () => {
   setTimeout(() => {
     loading.value = false
   }, 300)
+  
   const properties = customTabData.value.reduce(
     (r: Record<string, any>, { pKey, pValue, pType }) => {
       if ('profile_increment' === saType.value || 'profile_unset' === saType.value) {
