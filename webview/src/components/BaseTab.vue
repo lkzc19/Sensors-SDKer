@@ -4,6 +4,7 @@ import { ref, defineEmits, watch } from 'vue'
 import { SparklesSharp } from '@vicons/ionicons5'
 
 import type { BaseTabData } from '@/types/TabData'
+import * as ArrayUtils from '@/utils/ArrayUtils'
 
 const props = defineProps<{
   saType: string
@@ -55,14 +56,14 @@ const distinct_id_array = [
 ]
 
 const data = ref<BaseTabData>({
-  event: event_array[Math.floor(Math.random() * event_array.length)],
+  event: ArrayUtils.getRandomElement(event_array)!,
   idm_key: '',
   idm_value: '',
   item_type: '',
   item_id: '',
   time: '',
-  distinct_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
-  login_id: distinct_id_array[Math.floor(Math.random() * distinct_id_array.length)],
+  distinct_id: ArrayUtils.getRandomElement(distinct_id_array)!,
+  login_id: ArrayUtils.getRandomElement(distinct_id_array)!,
 })
 
 let event_tmp = data.value.event
@@ -100,7 +101,6 @@ const rules = {
   event: { required: true },
   time: { required: true },
 }
-
 </script>
 
 <template>
@@ -116,17 +116,35 @@ const rules = {
     }"
   >
     <n-form-item label="event" v-show="props.saType.startsWith('track')">
-      <n-input
-        v-model:value="data.event"
-        placeholder="输入事件名"
-        :disabled="props.saType !== 'track'"
-      />
+      <n-input-group>
+        <n-input
+          v-model:value="data.event"
+          placeholder="输入事件名"
+          :disabled="props.saType !== 'track'"
+        />
+        <n-button
+          strong
+          secondary
+          type="primary"
+          @click="data.event = ArrayUtils.getRandomElement(event_array)!"
+        >
+          <template #icon>
+            <n-icon>
+              <SparklesSharp />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-input-group>
     </n-form-item>
     <n-form-item label="idm_key" v-show="props.saType.endsWith('bind')">
-      <n-input
-        v-model:value="data.idm_key"
-        :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
-      />
+      <n-input-group>
+        <n-input
+          v-model:value="data.idm_key"
+          :placeholder="
+            props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'
+          "
+        />
+      </n-input-group>
     </n-form-item>
     <n-form-item label="idm_value" v-show="props.saType.endsWith('bind')">
       <n-input
@@ -135,19 +153,27 @@ const rules = {
       />
     </n-form-item>
     <n-form-item label="item_type" v-show="props.saType.startsWith('item')">
-      <n-input
-        v-model:value="data.item_type"
-        placeholder="输入物品所属类型"
-      />
+      <n-input v-model:value="data.item_type" placeholder="输入物品所属类型" />
     </n-form-item>
     <n-form-item label="item_id" v-show="props.saType.startsWith('item')">
-      <n-input
-        v-model:value="data.item_id"
-        placeholder="输入物品ID"
-      />
+      <n-input v-model:value="data.item_id" placeholder="输入物品ID" />
     </n-form-item>
     <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
-      <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
+      <n-input-group>
+        <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
+        <n-button
+          strong
+          secondary
+          type="primary"
+          @click="data.distinct_id = ArrayUtils.getRandomElement(distinct_id_array)!"
+        >
+          <template #icon>
+            <n-icon>
+              <SparklesSharp />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-input-group>
     </n-form-item>
     <n-form-item label="login_id" v-show="'track_signup' === props.saType">
       <n-input v-model:value="data.login_id" placeholder="login_id" />
