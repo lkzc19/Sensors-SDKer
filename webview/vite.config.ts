@@ -17,22 +17,18 @@ export default defineConfig({
       imports: [
         'vue',
         {
-          'naive-ui': [
-            'useDialog',
-            'useMessage',
-            'useNotification',
-            'useLoadingBar'
-          ]
-        }
-      ]
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+        },
+      ],
     }),
     Components({
-      resolvers: [NaiveUiResolver()]
-    })
+      resolvers: [NaiveUiResolver()],
+    }),
   ],
   resolve: {
+    extensions: ['.js', '.ts', '.vue'],
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   build: {
@@ -42,7 +38,7 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/index.js',
         assetFileNames: 'assets/index.[ext]',
-      }
-    }
+      },
+    },
   },
 })

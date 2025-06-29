@@ -8,8 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BaseTab: typeof import('./src/components/BaseTab.vue')['default']
-    BtInput: typeof import('./src/components/BtInput.vue')['default']
+    Basetab: typeof import('./src/components/BaseTab/basetab.vue')['default']
+    BaseTab: typeof import('./src/components/BaseTab/index.vue')['default']
+    Btinput: typeof import('./src/components/BaseTab/btinput.vue')['default']
+    BtInput: typeof import('./src/components/BaseTab/BtInput.vue')['default']
     CustomTab: typeof import('./src/components/CustomTab.vue')['default']
     EventInput: typeof import('./src/components/EventInput.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
