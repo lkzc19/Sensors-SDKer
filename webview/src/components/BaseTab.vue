@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, defineEmits, watch } from 'vue'
 
-import { SparklesSharp } from '@vicons/ionicons5'
-
+import BtInput from './BtInput.vue'
 import type { BaseTabData } from '@/types/TabData'
 import * as ArrayUtils from '@/utils/ArrayUtils'
 
@@ -10,60 +9,17 @@ const props = defineProps<{
   saType: string
 }>()
 
-const event_array = [
-  'LightAttack',
-  'HeavyAttack',
-  'Parry',
-  'Riposte',
-  'Block',
-  'ShieldBash',
-  'Roll',
-  'Backstep',
-  'Jump',
-  'PlungingAttack',
-  'ComboAttacks',
-  'ChargeAttack',
-  'UseItem',
-  'TwoHandWield',
-  'SpellCasting',
-]
-
-const distinct_id_array = [
-  'the-unspeakable-deep',
-  'the-banquet',
-  'the-village',
-  'the-forest',
-  'the-keep',
-  'the-imposter',
-  'the-castle',
-  'the-red-hall',
-  'the-cave',
-  'the-mire',
-  'the-dome',
-  'the-sacrifice',
-  'the-ziggurat',
-  'the-construct',
-  'the-ruins',
-  'the-pitchwoods',
-  'the-lake',
-  'the-alkymancery',
-  'the-crypt',
-  'the-palace',
-  'ronin-cran',
-  'the-dried-king',
-  'the-witch-of-the-lake',
-  'the-nameless-god',
-]
+import { EVENT_ARRAY, IDENTITIES_ARRAY } from '@/constants/r'
 
 const data = ref<BaseTabData>({
-  event: ArrayUtils.getRandomElement(event_array)!,
+  event: ArrayUtils.getRandomElement(EVENT_ARRAY)!,
   idm_key: '',
   idm_value: '',
   item_type: '',
   item_id: '',
   time: '',
-  distinct_id: ArrayUtils.getRandomElement(distinct_id_array)!,
-  login_id: ArrayUtils.getRandomElement(distinct_id_array)!,
+  distinct_id: ArrayUtils.getRandomElement(IDENTITIES_ARRAY)!,
+  login_id: ArrayUtils.getRandomElement(IDENTITIES_ARRAY)!,
 })
 
 let event_tmp = data.value.event
@@ -115,27 +71,14 @@ const rules = {
       maxWidth: '640px',
     }"
   >
-    <n-form-item label="event" v-show="props.saType.startsWith('track')">
-      <n-input-group>
-        <n-input
-          v-model:value="data.event"
-          placeholder="输入事件名"
-          :disabled="props.saType !== 'track'"
-        />
-        <n-button
-          strong
-          secondary
-          type="primary"
-          @click="data.event = ArrayUtils.getRandomElement(event_array)!"
-        >
-          <template #icon>
-            <n-icon>
-              <SparklesSharp />
-            </n-icon>
-          </template>
-        </n-button>
-      </n-input-group>
-    </n-form-item>
+    <BtInput
+      v-show="saType.startsWith('track')"
+      v-model="data.event"
+      p-label="event"
+      p-placeholder="输入事件名"
+      :p-disabled="props.saType !== 'track'"
+      :p-r="EVENT_ARRAY"
+    />
     <n-form-item label="idm_key" v-show="props.saType.endsWith('bind')">
       <n-input-group>
         <n-input
@@ -158,25 +101,19 @@ const rules = {
     <n-form-item label="item_id" v-show="props.saType.startsWith('item')">
       <n-input v-model:value="data.item_id" placeholder="输入物品ID" />
     </n-form-item>
-    <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
-      <n-input-group>
-        <n-input v-model:value="data.distinct_id" placeholder="输入distinct_id" />
-        <n-button
-          strong
-          secondary
-          type="primary"
-          @click="data.distinct_id = ArrayUtils.getRandomElement(distinct_id_array)!"
-        >
-          <template #icon>
-            <n-icon>
-              <SparklesSharp />
-            </n-icon>
-          </template>
-        </n-button>
-      </n-input-group>
-    </n-form-item>
-    <n-form-item label="login_id" v-show="'track_signup' === props.saType">
-      <n-input v-model:value="data.login_id" placeholder="login_id" />
-    </n-form-item>
+    <BtInput
+      v-show="'track_signup' !== props.saType"
+      v-model="data.distinct_id"
+      p-label="distinct_id"
+      p-placeholder="输入distinct_id"
+      :p-r="IDENTITIES_ARRAY"
+    />
+    <BtInput
+      v-show="'track_signup' === props.saType"
+      v-model="data.login_id"
+      p-label="login_id"
+      p-placeholder="输入login_id"
+      :p-r="IDENTITIES_ARRAY"
+    />
   </n-form>
 </template>
