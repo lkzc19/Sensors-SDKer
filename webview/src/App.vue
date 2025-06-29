@@ -12,13 +12,12 @@ import type { BaseTabData, OtherTabData } from '@/types/TabData'
 import BaseTab from './components/BaseTab.vue'
 import CustomTab from './components/CustomTab.vue'
 
-const serverURL = ref('')
+const serverURL = ref('http://10.129.20.17:8106/sa?project=default')
 
 const saTypeOptions = [
   { label: 'track', value: 'track' },
   { label: 'track_signup', value: 'track_signup' },
   { label: 'track_id_bind', value: 'track_id_bind' },
-  { label: 'track_id_unbind', value: 'track_id_unbind' },
   { label: 'track_id_unbind', value: 'track_id_unbind' },
   { label: 'profile_set', value: 'profile_set' },
   { label: 'profile_set_once', value: 'profile_set_once' },
@@ -136,12 +135,12 @@ const logout = () => {
       </n-space>
       <n-input type="text" size="large" placeholder="大" v-model:value="serverURL" />
       <n-button-group size="large">
-        <n-button class="send" type="success" ghost @click="send" >上 报</n-button>
+        <n-button class="send" type="success" ghost @click="send">上 报</n-button>
         <n-dropdown
           placement="bottom-end"
           trigger="click"
           size="large"
-          :options="[{label: '清除缓存(logout)',key: 'logout'}]"
+          :options="[{ label: '清除缓存(logout)', key: 'logout' }]"
           @click="logout"
         >
           <n-button class="logout" type="success" ghost>
@@ -150,10 +149,9 @@ const logout = () => {
                 <ChevronDown />
               </n-icon>
             </template>
-          </n-button>  
+          </n-button>
         </n-dropdown>
       </n-button-group>
-
     </div>
     <div>
       <n-card>
