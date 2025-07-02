@@ -70,14 +70,16 @@ const rules = {
       maxWidth: '640px',
     }"
   >
-    <BtInput
-      v-show="saType.startsWith('track')"
-      v-model="data.event"
-      p-label="event"
-      p-placeholder="输入事件名"
-      :p-disabled="props.saType !== 'track'"
-      :p-r="EVENT_ARRAY"
-    />
+    <n-form-item label="event" v-show="saType.startsWith('track')">
+      <BtInput
+        v-model="data.event"
+        p-label="event"
+        p-placeholder="输入事件名"
+        :p-disabled="props.saType !== 'track'"
+        :p-r="EVENT_ARRAY"
+      />
+    </n-form-item>
+
     <n-form-item label="idm_key" v-show="props.saType.endsWith('bind')">
       <n-input-group>
         <n-input
@@ -88,31 +90,38 @@ const rules = {
         />
       </n-input-group>
     </n-form-item>
+
     <n-form-item label="idm_value" v-show="props.saType.endsWith('bind')">
       <n-input
         v-model:value="data.idm_value"
         :placeholder="props.saType === 'track_id_bind' ? '输入要绑定id的key' : '输入要解绑id的key'"
       />
     </n-form-item>
+
     <n-form-item label="item_type" v-show="props.saType.startsWith('item')">
       <n-input v-model:value="data.item_type" placeholder="输入物品所属类型" />
     </n-form-item>
+
     <n-form-item label="item_id" v-show="props.saType.startsWith('item')">
       <n-input v-model:value="data.item_id" placeholder="输入物品ID" />
     </n-form-item>
-    <BtInput
-      v-show="'track_signup' !== props.saType"
-      v-model="data.distinct_id"
-      p-label="distinct_id"
-      p-placeholder="输入distinct_id"
-      :p-r="IDENTITIES_ARRAY"
-    />
-    <BtInput
-      v-show="'track_signup' === props.saType"
-      v-model="data.login_id"
-      p-label="login_id"
-      p-placeholder="输入login_id"
-      :p-r="IDENTITIES_ARRAY"
-    />
+
+    <n-form-item label="distinct_id" v-show="'track_signup' !== props.saType">
+      <BtInput
+        v-show="'track_signup' !== props.saType"
+        v-model="data.distinct_id"
+        p-placeholder="输入distinct_id"
+        :p-r="IDENTITIES_ARRAY"
+      />
+    </n-form-item>
+
+    <n-form-item label="login_id" v-show="'track_signup' === props.saType">
+      <BtInput
+        v-model="data.login_id"
+        p-label="login_id"
+        p-placeholder="输入login_id"
+        :p-r="IDENTITIES_ARRAY"
+      />
+    </n-form-item>
   </n-form>
 </template>
