@@ -5,6 +5,13 @@
 其格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
 且本项目遵循 [语义化版本控制](https://semver.org/spec/v2.0.0.html)。
 
+## [0.2.1] 2025-07-3
+
+### Fixed
+
+- 修复事件名等输入框输入不了问题；
+- 修复上报地址修改无效问题；
+
 ## [0.2.0] 2025-06-29
 
 ### Added

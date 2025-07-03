@@ -3,7 +3,7 @@
   "displayName": "Sensors SDKer",
   "description": "使用该插件可以方便上报事件到神策。",
   "icon": "images/icon.jpg",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publisher": "z-drugs",
 
   "author": {

@@ -13,6 +13,14 @@ import BaseTab from '@/components/BaseTab/index.vue'
 import CustomTab from '@/components/CustomTab.vue'
 
 const serverURL = ref('')
+// 初始化神策sdk
+sensors.init({
+  use_client_time: true,
+  heatmap: {
+    clickmap: 'not_collect',
+    scroll_notice_map: 'not_collect',
+  },
+});
 
 const saTypeOptions = [
   { label: 'track', value: 'track' },
@@ -68,18 +76,10 @@ const send = () => {
       return r
     },
     {} as Record<string, any>,
-  )
-  console.log(properties)
+  );
 
-  sensors.init({
-    server_url: serverURL.value,
-    show_log: true,
-    use_client_time: true,
-    heatmap: {
-      clickmap: 'not_collect',
-      scroll_notice_map: 'not_collect',
-    },
-  })
+  // 神策没有提供可以修改上报地址方法，只能通过如下方法强行修改
+  (sensors as any).para.server_url = serverURL.value;
 
   if (StringUtils.isNotEmpty(baseTabData.value!.distinct_id)) {
     sensors.identify(baseTabData.value!.distinct_id, false)
@@ -114,7 +114,7 @@ const send = () => {
   }
 }
 
-const logout = () => {
+const logout = () => {  
   sensors.logout()
 }
 
